@@ -45,7 +45,8 @@ public class UserDetails {
 	@Column(name="creation_date")
 	private Date creation_date;
 
-	
+	@Column(name="stripe_customer_id")
+	private String stripe_customer_id;
 
 	public String getUser_id() {
 		return user_id;
@@ -111,6 +112,14 @@ public class UserDetails {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getStripe_customer_id() {
+		return stripe_customer_id;
+	}
+
+	public void setStripe_customer_id(String stripe_customer_id) {
+		this.stripe_customer_id = stripe_customer_id;
 	}
 	
 	

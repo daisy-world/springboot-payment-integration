@@ -52,6 +52,7 @@ public class LoginController {
 		}
 		
 		httpSession.setAttribute("name", userDetails.getFirst_name());
+		httpSession.setAttribute("email", userDetails.getEmail());
 		if( password.equals(userDetails.getConfirm_password())){
 			logger.debug("password & db password should match  "  +  password   +" " +  userDetails.getConfirm_password() );
 

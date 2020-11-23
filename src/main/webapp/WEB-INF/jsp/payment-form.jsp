@@ -1,5 +1,4 @@
 
-
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -41,109 +40,93 @@
 				<!-- Page Heading -->
 				<div class="row" id="main">
 					<div class="col-sm-12 col-md-12 well" id="content">
-					<%-- 	<c:if test="${not empty cardDetails}">
-							<h3 style="align-self: center">Your saved credit and debit
-								cards</h3>
-							<form action="payWithExistingCard" method="post" id="">
-								<table class="table highlight bordered"
-									style="margin-bottom: 0;">
-									<tr>
-										<th width="5%">Select</th>
-										<th width="16%">Card Type</th>
-										<th width="10%">Brand</th>
-										<th width="40%">Card Details</th>
-										<th width="30%">Expiry</th>
-										<!--  <th width="1%"></th> -->
-
-									</tr>
-
-									<c:forEach var="listValue" items="${cardDetails}"
-										varStatus="count">
-
-										<tr id="hideTable${listValue.cardId}">
-											<td width="6%">
-												<input type="radio" id="" name="cardId" value="${listValue.cardId}" />
-												<input type="radio" id="test${count.index}"
-												name="paymentMethodId" value="${listValue.cardId}"
-												onclick="showRadioBtnValue('${count.index}')" /> <label
-												for="test${count.index}"></label>
-											</td>
-											<td width="16%"><img class="img img-responsive"
-												style="width: 40px; height: 32px;" alt="visa"
-												src="http://icons.iconarchive.com/icons/designbolts/credit-card-payment/128/Visa-icon.png">
-											</td>
-											<td width="10%">${listValue.brand}</td>
-											<td width="40%">**** **** **** ${listValue.last4digit}</td>
-											<td width="30%">${ listValue.expMonth } / ${ listValue.expYear }</td>
-											<td width="1%"><button type="button"
-													onclick="deleteCard('${listValue.cardId}')">
-													<i class="fa fa-trash" aria-hidden="true"></i>
-												</button></td>
-										</tr>
-
-
-
-
-									</c:forEach>
-								</table>
-								<br>
-								<center>
-
-									<button type="button" class="btn waves-effect company-color">
-										Pay GBP
-										<fmt:formatNumber type="number" minFractionDigits="2"
-											maxFractionDigits="2" value="${payAmount}" />
-
-									</button>
-
-								</center>
-							</form>
-						</c:if> --%>
-
-
 
 						<div class="card">
-							<c:if test="${not empty cardDetails}">
-
-								<center>
-									<h3>Pay with new card</h3>
-								</center>
-							</c:if>
-
-							<form action="payWithNewCard" method="post" id="payment-form">
+							<center>
+								<h3>Pay with new card</h3>
+							</center>
+							<form action="" method="" id="payment-form">
+					<%--  <input type="hidden" id="customer-email" class="form-control"name = "customer-email" value = "${customerEmail}" >
+				  <input type="hidden" id="user-email" class="form-control"name = "user-email"  value = "${userEmail}">
+				  <input type="hidden" id="amount" class="form-control"name = "amount" value = "${amount}" >
+					 --%> 
+				  <input type="hidden" id="secretId" class="form-control"name = "secretId" value = "${clientSecret}" >
 
 								<span id="stripe-error"></span>
-								<div id="payment-request-button"></div>
-
 
 								<div id="card-element"></div>
 
-								
-								<div style="margin: 0 auto; max-width: 400px; box-sizing: border-box; padding: 0 5px">
-									<div>
+
+								<div
+									style="margin: 0 auto; max-width: 400px; box-sizing: border-box; padding: 0 5px">
+									<div style ="margin-left: -335px;">
 										<br /> <input type="checkbox" id="remember" name="remember"
 											type="checkbox" /> <label for="remember"><span>Remember
 										</span></label>
 									</div>
 
 									<br>
+								
+								</div>
 									<div class="form-group">
-										<center>
 											<button type="button" id="paymentId"
-												class="btn btn-primary btn-block">
-												Pay GBP
+												class="btn btn-primary btn-block" onclick="payWithNewCard()">
+												Pay INR
 												<fmt:formatNumber type="number" minFractionDigits="2"
-													maxFractionDigits="2" value="20" />
+													maxFractionDigits="2" value="${amount}" />
 
 
 											</button>
-										</center>
-									</div>
 									</div>
 							</form>
 						</div>
+						
+						<div id = "result"></div>
 
 					</div>
+					 <div class="col-sm-12 col-md-12 well" id="content">
+					 <form action="" method="" id="existing-payment-form">
+					   <input type="hidden" id="customerEmail" class="form-control"name = "customerEmail"  value = "${customerEmail}">
+				  <input type="hidden" id="amount" class="form-control"name = "amount" value = "${amount}" >
+						<center>
+							<h2>Your saved credit and debit cards</h2>
+						</center>
+						   <table class="table highlight bordered" id = "">
+                          <tr>
+							  <th width="5%">
+							  	Select
+							  </th>
+							  <th width="16%">
+							  Card Type
+							  </th>
+							  <th width="10%">Brand</th>
+							  <th width="40%">last 4 digit</th>
+							  <th width="30%">Expiry</th>							  
+							</tr>	
+								
+					<c:forEach var="listValue" items="${cards}" varStatus="count">
+					<tr>
+							  <td width="6%">
+							  	<input type="radio" id="paymentMethodId" name="paymentMethodId" value="${listValue.cardId}" />
+      							<label for="${count.index}"></label>
+							  </td>
+							
+							  <td width="10%">${listValue.brand}</td>
+							  <td width="40%">**** **** **** ${listValue.last4digit}</td>
+							  <td width="30%"> ${ listValue.expMonth } / ${ listValue.expYear }</td>
+					  <td width="1%"><button type = "button"onclick="deleteCard('${listValue.cardId}')"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+ 						 </tr>   <br/>                   																									
+                        </c:forEach>
+                        
+                        </table>
+                        
+                         <button type="button" class="btn btn-primary btn-block" id = "" onclick= "payWithExistingCard()">Pay INR 
+							   		<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${amount}" />
+							   
+							   </button>
+							   </form>
+					</div> 
+
 				</div>
 				<!-- /.row -->
 
@@ -157,9 +140,10 @@
 	</div>
 	<!-- /#wrapper -->
 
-
-<script src="${pageContext.request.contextPath}/js/payment.js"></script>
+	<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+	<script src="${pageContext.request.contextPath}/js/payment.js"></script>
 
 </body>
 </html>
+
 

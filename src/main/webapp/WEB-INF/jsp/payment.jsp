@@ -52,9 +52,11 @@
                <div class = "col-sm-4">
                 <input type="number" id="amount" class="form-control"name = "amount" required >
                </div>
-               </div><br/><br/><br/>
+               </div><br/><br/>
+               	<div class="form-group">
+               
                 <button class="btn btn-primary btn-block" type="submit">Make Payment</button>
-                
+                </div>
             </form>
                 </div>
             </div>

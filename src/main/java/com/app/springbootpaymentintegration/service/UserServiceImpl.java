@@ -19,11 +19,14 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserDetailsRepository userDetailsRepository;
 	
+	@Autowired
+	PaymentService paymentService;
+	
 	@Override
 	public UserDetails addAccount(String firstName,String lastName,String email,String password,String confirmPassword) {
 		
-		
-        
+		String name = firstName + " " + lastName;
+		String customerId= paymentService.createStripeCustomer(email, name);
 		/*insert to user details table*/
 
 		UserDetails userDetails = new UserDetails();
@@ -34,6 +37,7 @@ public class UserServiceImpl implements UserService {
 		userDetails.setConfirm_password(confirmPassword);
 		userDetails.setRole("Admin");
 		userDetails.setCreation_date(new Date());
+		userDetails.setStripe_customer_id(customerId);
 		UserDetails details = userDetailsRepository.save(userDetails);
 		return details;
 

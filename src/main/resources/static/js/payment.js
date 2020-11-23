@@ -1,22 +1,16 @@
-var stripe = Stripe('pk_test_xjnXqdADf89rDZ7xAOZdY1MZ');
 
+
+var stripe = Stripe('pk_test_51Hn61vDoYZOw3lkjjZwlLilHqgH6V6S6YPO9FOH5HvfT07JRaFUVu4Ilz8CYT1Fzslao7QZtivU00pwkLjiDvqrM00OLfrvRxk');
 
 
 // Create an instance of Elements
 var elements = stripe.elements();
 
 // Custom styling can be passed to options when creating an Element.
-// (Note that this demo uses a wider set of styles than the guide below.)
 var style = {
   base: {
-    color: '#000',
-    lineHeight: '18px',
-    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#aab7c4'
-    }
+	  fontSize: '16px',
+	    color: '#32325d'
   },
   invalid: {
     color: '#fa755a',
@@ -25,7 +19,100 @@ var style = {
 };
 
 // Create an instance of the card Element
-var card = elements.create('card', {style: style});
+var card = elements.create('card');
+//var card = elements.create('card', {style: style});
 
 // Add an instance of the card Element into the `card-element` <div>
 card.mount('#card-element');
+
+var  clientSecret =  $('#secretId').val();
+var remember =  $('#remember').val();
+console.log(remember);
+
+function payWithNewCard(){
+	
+	 stripe.handleCardPayment(
+			    clientSecret, card 
+			  ).then(function(result) {
+				  console.log(result);
+				  
+				    if (result.error) {
+				    	alert("your transaction is declined for this reason " + result.error.message);
+				    }
+		           
+				    
+				    else {
+				    	 $.ajax({  
+						 	 type: "POST",   
+						     url :"http://localhost:3000/payWithNewCard",
+						     data:{remember: remember,
+						    	   paymentId:result.paymentIntent.id,
+						    	  },
+						     success : function(response) {
+						    	 alert("your transaction is " +response);
+						    	 location.reload();						     
+						    	 },
+						     error: function (response){
+                               	console.log(response);
+						        }
+						 });
+				    }
+	  });			  
+	
+	
+}
+
+var  amount =  $('#amount').val();
+var paymentMethodId =  $('#paymentMethodId').val();
+var customerEmail =  $('#customerEmail').val();
+	console.log(paymentMethodId);
+	console.log(customerEmail);
+function payWithExistingCard(){
+	console.log('existing card')
+  	 $.ajax({  
+	 	 type: "POST",   
+	     url : "http://localhost:3000/payWithExistingCard",
+	     data:{amount: amount,
+	    	 paymentMethodId: paymentMethodId,
+	    	 customerEmail:customerEmail,
+	    	  },
+	     success : function(response) {
+	    	 
+	    	 console.log(response);
+	    	 alert("your transaction is " +response);
+
+	     },
+	     error: function (response){
+            	console.log(response);
+	 }
+  	 });
+  	 }
+
+//delete card//
+function deleteCard(cardId){
+	
+	
+    if (confirm('Are you sure you want to delete this card?')) {
+
+	 $.ajax({  
+	 	 type: "POST",   
+	     url : "http://localhost:3000/deleteCard",         		
+	     data:{'cardId': cardId},	    	   
+	     success : function(response) {  
+         	console.log(response);
+
+
+	    if(response=='success'){
+	    	 location.reload();						     
+
+	    }
+
+	     },  
+	     error : function(e) {  
+	      alert('Error: ' + e);   
+	     }  
+	
+  });  
+	
+}
+}

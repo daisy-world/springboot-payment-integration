@@ -45,6 +45,11 @@ public class Cards {
 	public void setLast4digit(String last4digit) {
 		this.last4digit = last4digit;
 	}
+	@Override
+	public String toString() {
+		return "Cards [cardId=" + cardId + ", expMonth=" + expMonth + ", expYear=" + expYear + ", name=" + name
+				+ ", brand=" + brand + ", last4digit=" + last4digit + "]";
+	}
 	
 	
 	
