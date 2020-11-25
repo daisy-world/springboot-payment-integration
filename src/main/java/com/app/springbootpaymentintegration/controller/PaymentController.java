@@ -154,21 +154,12 @@ public class PaymentController {
 		
 		
 				System.out.println("cardId ....... "   +  cardId);
-				String response = null;
 
 		if(null!=cardId && !cardId.isEmpty()){
 			
-		boolean b = paymentService.detachACardFromCustomer(cardId);
-		if(b){
-			response =  "success";
-
-       }else {
-			response =  "failed";
-  
-       }
+			paymentService.detachACardFromCustomer(cardId);
 			
 		}
-		return response;
 		
 }
 }
