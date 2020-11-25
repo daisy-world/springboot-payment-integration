@@ -189,22 +189,13 @@ public class PaymentServiceImpl implements PaymentService {
 	public boolean detachACardFromCustomer(String cardId) {
 		Stripe.apiKey = stripePrivateKey;
 
-		PaymentMethod paymentMethod=null;
 		try {
-			paymentMethod = PaymentMethod.retrieve(cardId);
-			paymentMethod =paymentMethod.detach();
-			
-			System.out.println("paymentMethod....... "  +  paymentMethod);
-			if(paymentMethod.getCustomer()==null){
-				System.out.println("customer detach");
-				return true;
-			}else
-				return false;
+		PaymentMethod	paymentMethod = PaymentMethod.retrieve(cardId);
+		paymentMethod =paymentMethod.detach();
 
-		} catch (StripeException e) {
-			e.printStackTrace();
-		}
-		return false;
+			} catch (StripeException e) {
+				e.printStackTrace();
+			}
 	}
 
 	
