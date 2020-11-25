@@ -19,7 +19,7 @@ public interface PaymentService {
 
 	public PaymentIntent chargeSavedCards(double amount, String currency, String userEmail, String paymentMethodId,String customerEmail,String stripeCustomerId);
 
-	public boolean detachACardFromCustomer(String cardId);
+	public void detachACardFromCustomer(String cardId);
 
 	
 	public List<Cards> getSavedCardListByCustomerId(String customerId);
