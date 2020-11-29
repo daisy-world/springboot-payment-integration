@@ -52,7 +52,7 @@
 					 --%> 
 				  <input type="hidden" id="secretId" class="form-control"name = "secretId" value = "${clientSecret}" >
 
-								<span id="stripe-error"></span>
+								<div id="payment-request-button"></div>
 
 								<div id="card-element"></div>
 
