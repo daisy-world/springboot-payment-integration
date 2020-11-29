@@ -50,7 +50,6 @@ function payWithNewCard(){
 						    	  },
 						     success : function(response) {
 						    	 alert("your transaction is " +response);
-						    	 location.reload();						     
 						    	 },
 						     error: function (response){
                                	console.log(response);
@@ -99,14 +98,10 @@ function deleteCard(cardId){
 	     url : "http://localhost:3000/deleteCard",         		
 	     data:{'cardId': cardId},	    	   
 	     success : function(response) {  
-         	console.log(response);
 
-
-	    if(response=='success'){
 	    	 location.reload();						     
 
-	    }
-
+	  
 	     },  
 	     error : function(e) {  
 	      alert('Error: ' + e);   
@@ -116,3 +111,91 @@ function deleteCard(cardId){
 	
 }
 }
+
+/*payment request button */
+
+//  Create the PaymentRequest instance 
+var paymentRequest = stripe.paymentRequest({
+	  country: 'IN',
+	  currency: 'inr',
+	  total: {
+	    label: 'total amount',
+	    amount: amount*100,
+	  },
+	  requestPayerName: true,
+	  requestPayerEmail: true,
+	});
+
+console.log(paymentRequest);
+
+
+//Create and mount the paymentRequestButton Element 
+var elements = stripe.elements();
+var prButton = elements.create('paymentRequestButton', {
+	  paymentRequest: paymentRequest
+
+	});
+console.log(prButton);
+
+
+// Check the availability of the Payment Request API first.
+paymentRequest.canMakePayment().then(function(result) {
+	  if (result) {
+		  
+	    prButton.mount('#payment-request-button');
+	  } else {
+		  
+	    document.getElementById('payment-request-button').style.display = 'none';
+	  }
+	});
+       
+       //Complete the payment using payment intent method
+
+       
+
+paymentRequest.on('paymentmethod', function(ev) {
+	  stripe.confirmPaymentIntent(clientSecret, {
+	    payment_method: ev.paymentMethod.id,
+	  }).then(function(result) {
+	    if (result.error) {
+	    	
+	    	alert("transaction failed... "  + result.error);
+	    	console.log(result.error);
+	      // Report to the browser that the payment failed, prompting it to
+	      // re-show the payment interface, or show an error message and close
+	      // the payment interface.
+	      ev.complete('fail');
+	      
+	    } else {
+	    	 ev.complete('success');
+		      // Let Stripe.js handle the rest of the payment flow.
+		      stripe.handleCardPayment(clientSecret).then(function(result) {
+		    	  if (result.error) {
+			        	console.log("error"); 
+			        	
+		    	  } else{
+		    		  
+		    			 $.ajax({  
+						 	 type: "POST",   
+						     url : "http://localhost:3000/payWithNewCard",
+						     data:{ paymentId:result.paymentIntent.id},
+						    success : function(response) {
+						    	 alert("your transaction is " +response);    	 
+						    	 
+						     },error: function (response){
+						        
+					        console.log(response.statusText);
+							}
+		    		  
+		    			 });
+		    		  
+		    	  } 	
+			        	
+		    	  
+		      });
+	    	
+	    	
+	    }
+	  });
+	  
+});
